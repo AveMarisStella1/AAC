@@ -1,0 +1,101 @@
+---
+title: "AAC Website"
+format: 
+  html:
+    code-links:
+      href: AACweb2.html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(quarto)
+library(bslib)
+library(tidyverse)
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r pt 1}
+#| echo: false
+df = read.csv("C:/Users/jakey/Downloads/merged-exam-rps-data.csv")
+df$SellerName <- toupper(df$SellerName)
+df$SellerName <- trimws(df$SellerName)
+df$BuyerName <- toupper(df$BuyerName)
+df$BuyerName <- trimws(df$BuyerName)
+df$DocumentDate <- as.Date(df$DocumentDate, "%Y-%m-%d")
+df$Yr <- format(df$DocumentDate, "%Y")
+df$Address <- gsub("\\s+", " ", toupper(trimws(df$Address)))
+df$ZipCode <- substr(df$ZipCode, 1, 5)
+df$ZipCode[df$ZipCode %in% c("WA", "98", "0", "")] <- NA
+
+```
+
+```{r pt 2}
+#| panel: fill
+#| echo: false
+
+my_thing <- df %>% group_by(YrBuilt) %>% summarize("Price" <- mean(SalePrice))
+
+plot(my_thing$YrBuilt, my_thing$`"Price" <- mean(SalePrice)`, xlab = "Year Built", ylab = "Mean Price")
+
+
+```
+
+```{r pt 3}
+#| echo: false
+page_fluid(
+
+  layout_column_wrap(
+
+    card(
+      card_header("GDP Growth"),
+      "2.3%"
+    ),
+
+    card(
+      card_header("Unemployment"),
+      "4.1%"
+    ),
+
+    card(
+      card_header("Inflation"),
+      "2.7%"
+    )
+  )
+)
+
+
+
+```
+
+## Start Tabset {.panel-tabset}
+
+### First Tab
+
+Welcome to the first tab
+
+```{r 2.1}
+#| echo: false
+2 + 2
+```
+
+### Second Tab
+
+Welcome to the second tab
+
+## Close
